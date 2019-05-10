@@ -28,7 +28,7 @@ namespace HackathonAPI.Controllers
             return repo.ListAll();
         }
 
-        [HttpGet("{CustomerId}")]
+        [HttpGet("customer/{CustomerId}")]
         public List<Subscriptions> GetByCustomer(int CustomerId)
         {
             return repo.List(CustomerId);
