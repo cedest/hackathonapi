@@ -70,7 +70,8 @@ namespace HackathonAPI.Repositories
                             CustomerId = order.CustomerId,
                             CustomerName = customer.FullName,
                             ProductId = item.ProductId,
-                            ProductName = product.ProductName
+                            ProductName = product.ProductName,
+
                         };
                         conn.Insert(orders);
                     });

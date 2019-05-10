@@ -56,7 +56,7 @@ namespace HackathonAPI.Controllers
         }
 
         // DELETE api/values/5
-        [HttpDelete("{SubscriptionId/Status}")]
+        [HttpDelete("{SubscriptionId}/{Status}")]
         public Response Delete(int SubscriptionId, bool Status)
         {
             return repo.Delete(SubscriptionId, Status);
