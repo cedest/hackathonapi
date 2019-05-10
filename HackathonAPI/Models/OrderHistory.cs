@@ -4,7 +4,7 @@ using Dapper;
 
 namespace HackathonAPI.Models
 {
-    [Table("OrderHistory")]
+    [Table("orders")]
     public class OrderHistory
     {
         [Key]

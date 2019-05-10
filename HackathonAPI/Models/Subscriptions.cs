@@ -16,5 +16,13 @@ namespace HackathonAPI.Models
         public int FrequencyId { get; set; }
         public string Frequency { get; set; }
         public bool Status { get; set; }
+        public DateTime SubscriptionDate { get; set; }
+    }
+
+    public class NewSubscriptions
+    {
+        public int CustomerId { get; set; }
+        public int ProductId { get; set; }
+        public int FrequencyId { get; set; }
     }
 }

@@ -74,6 +74,17 @@ namespace HackathonAPI.Repositories
                         };
                         conn.Insert(orders);
                     });
+                    string sql = @"select * from products where productid in (
+                                SELECT a.productid from orders a 
+                                where a.customerid = 1 and productid not in (select productid from subscriptions where customerid = a.customerid)
+                                group by a.productid
+                                having count(a.productid) > 1)";
+                    var products = conn.Query<Products>(sql).ToList();
+                    if(products.Count > 0)
+                    {
+                        response.SuggestSubscription = true;
+                        response.SuggestedProducts = products;
+                    }
                     response.Status = true;
                     response.Description = "Record saved";
                 }
