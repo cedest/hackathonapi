@@ -56,10 +56,10 @@ namespace HackathonAPI.Controllers
         }
 
         // DELETE api/values/5
-        [HttpDelete("{SubscriptionId}")]
-        public Response Delete(int SubscriptionId)
+        [HttpDelete("{SubscriptionId/Status}")]
+        public Response Delete(int SubscriptionId, bool Status)
         {
-            return repo.Delete(SubscriptionId);
+            return repo.Delete(SubscriptionId, Status);
         }
     }
 }

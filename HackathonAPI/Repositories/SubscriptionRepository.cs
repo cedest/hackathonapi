@@ -115,15 +115,15 @@ namespace HackathonAPI.Repositories
             return response;
         }
 
-        public Response Delete(int SubscriptionId)
+        public Response Delete(int SubscriptionId, bool Status)
         {
             Response response = new Response();
-            string sql = "Update subscriptions set status = false where SubscriptionId = ?SubscriptionId";
+            string sql = "Update subscriptions set status = ?Status where SubscriptionId = ?SubscriptionId";
             try
             {
                 using (IDbConnection conn = GetConnection())
                 {
-                    conn.Query(sql, new { SubscriptionId });
+                    conn.Query(sql, new { SubscriptionId, Status });
                     response.Status = true;
                     response.Description = "Record disabled";
                 }
