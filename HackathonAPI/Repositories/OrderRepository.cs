@@ -39,7 +39,8 @@ namespace HackathonAPI.Repositories
             List<OrderHistory> list = new List<OrderHistory>();
             using (IDbConnection conn = GetConnection())
             {
-                list = conn.GetList<OrderHistory>("Where CustomerId = ?CustomerId").ToList();
+                list = conn.GetList<OrderHistory>("Where CustomerId = ?CustomerId", new { CustomerId }).ToList();
+                 
             }
             return list;
         }
@@ -71,6 +72,8 @@ namespace HackathonAPI.Repositories
                             CustomerName = customer.FullName,
                             ProductId = item.ProductId,
                             ProductName = product.ProductName,
+                            ImageUrl = product.ImageUrl,
+                            UnitPrice=product.UnitPrice
 
                         };
                         conn.Insert(orders);

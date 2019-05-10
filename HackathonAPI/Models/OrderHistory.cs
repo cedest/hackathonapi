@@ -13,6 +13,10 @@ namespace HackathonAPI.Models
         public string CustomerName { get; set; }
         public int ProductId { get; set; }
         public string ProductName { get; set; }
+        public string ImageUrl { get; set; }
+        public decimal UnitPrice { get; set; }
+        public int Quantity { get; set; }
+        [ReadOnly(true)]
         public DateTime PurchaseDate { get; set; }
     }
 
