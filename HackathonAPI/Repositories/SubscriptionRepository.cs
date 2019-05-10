@@ -24,6 +24,116 @@ namespace HackathonAPI.Repositories
             return new MySqlConnection(ConnectionString);
         }
 
+        public List<Subscriptions> ListAll()
+        {
+            List<Subscriptions> list = new List<Subscriptions>();
+            using(IDbConnection conn = GetConnection())
+            {
+                list = conn.GetList<Subscriptions>().ToList();
+            }
+            return list;
+        }
 
+        public List<Subscriptions> List(int CustomerId)
+        {
+            List<Subscriptions> list = new List<Subscriptions>();
+            using (IDbConnection conn = GetConnection())
+            {
+                list = conn.GetList<Subscriptions>("Where CustomerId = ?CustomerId", new { CustomerId }).ToList();
+            }
+            return list;
+        }
+
+        public Subscriptions Read(int SubscriptionId)
+        {
+            Subscriptions subscription = new Subscriptions();
+            using(IDbConnection conn = GetConnection())
+            {
+                subscription = conn.Get<Subscriptions>(SubscriptionId);
+            }
+            return subscription;
+        }
+
+        public Response Create(NewSubscriptions subscription)
+        {
+            Response response = new Response();
+            try
+            {
+                using(IDbConnection conn = GetConnection())
+                {
+                    var exists = conn.GetList<Subscriptions>("Where CustomerId = ?CustomerId and ProductId = ?ProductId", subscription).ToList();
+                    if(exists.Count > 0)
+                    {
+                        response.Status = false;
+                        response.Description = "Record exists";
+                        return response;
+                    }
+                    var customers = conn.Get<Customers>(subscription.CustomerId);
+                    var products = conn.Get<Products>(subscription.ProductId);
+                    var frequencies = conn.Get<Frequencies>(subscription.FrequencyId);
+                    Subscriptions sub = new Subscriptions()
+                    {
+                        CustomerId = subscription.CustomerId,
+                        CustomerName = customers.FullName,
+                        ProductId = subscription.ProductId,
+                        ProductName = products.ProductName,
+                        Quantity = subscription.Quantity,
+                        Status = true,
+                        FrequencyId = subscription.FrequencyId,
+                        Frequency = frequencies.Frequency
+                    };
+                    conn.Insert(sub);
+                    response.Status = true;
+                    response.Description = "Record saved";
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Description = ex.Message;
+                response.Status = false;
+            }
+            return response;
+        }
+
+        public Response Update(Subscriptions subscription)
+        {
+            Response response = new Response();
+            try
+            {
+                using(IDbConnection conn = GetConnection())
+                {
+                    conn.Update(subscription);
+                    response.Status = true;
+                    response.Description = "Record updated";
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Description = ex.Message;
+                response.Status = false;
+            }
+            return response;
+        }
+
+        public Response Delete(int SubscriptionId)
+        {
+            Response response = new Response();
+            string sql = "Update subscriptions set status = false where SubscriptionId = ?SubscriptionId";
+            try
+            {
+                using (IDbConnection conn = GetConnection())
+                {
+                    conn.Query(sql, new { SubscriptionId });
+                    response.Status = true;
+                    response.Description = "Record disabled";
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Description = ex.Message;
+                response.Status = false;
+            }
+            return response;
+        }
     }
 }
