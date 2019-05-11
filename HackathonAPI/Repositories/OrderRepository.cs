@@ -150,7 +150,7 @@ namespace HackathonAPI.Repositories
                 {
                     conn.Update(order);
                     response.Status = true;
-                    response.Description = "Record saved";
+                    response.Description = "Record updated";
                 }
             }
             catch (Exception ex)
@@ -170,7 +170,7 @@ namespace HackathonAPI.Repositories
                 {
                     conn.Delete<OrderHistory>(OrderId);
                     response.Status = true;
-                    response.Description = "Record saved";
+                    response.Description = "Record deleted";
                 }
             }
             catch (Exception ex)
