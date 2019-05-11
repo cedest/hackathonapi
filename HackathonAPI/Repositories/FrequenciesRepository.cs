@@ -27,9 +27,16 @@ namespace HackathonAPI.Repositories
         public List<Frequencies> ListAll()
         {
             List<Frequencies> list = new List<Frequencies>();
-            using (IDbConnection conn = GetConnection())
+            try
             {
-                list = conn.GetList<Frequencies>().ToList();
+                using (IDbConnection conn = GetConnection())
+                {
+                    list = conn.GetList<Frequencies>().ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                var error = ex.Message;
             }
             return list;
         }

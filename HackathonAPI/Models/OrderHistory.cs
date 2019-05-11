@@ -29,10 +29,16 @@ namespace HackathonAPI.Models
     public class MyOrder
     {
         public int ProductId { get; set; }
-        public decimal Quantity { get; set; }
+        public int Quantity { get; set; }
     }
 
     public class NewOrderReponse : Response
+    {
+        public bool SuggestSubscription { get; set; }
+        public List<Products> SuggestedProducts { get; set; }
+    }
+
+    public class SuggestedItems
     {
         public bool SuggestSubscription { get; set; }
         public List<Products> SuggestedProducts { get; set; }

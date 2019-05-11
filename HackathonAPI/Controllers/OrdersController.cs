@@ -41,6 +41,18 @@ namespace HackathonAPI.Controllers
             return repo.List(customerid);
         }
 
+        [HttpGet("customer/{customerid}/suggestions")]
+        public SuggestedItems GetSuggestedItems(int customerid)
+        {
+            return repo.Suggestions(customerid);
+        }
+
+        [HttpGet("customer/{customerid}/related")]
+        public SuggestedItems GetRelatedProducts(int customerid)
+        {
+            return repo.RelatedProducts(customerid);
+        }
+
         // POST api/values
         [HttpPost]
         public Response Post([FromBody]NewOrder order)

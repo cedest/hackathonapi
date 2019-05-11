@@ -73,17 +73,17 @@ namespace HackathonAPI.Repositories
                             ProductId = item.ProductId,
                             ProductName = product.ProductName,
                             ImageUrl = product.ImageUrl,
-                            UnitPrice=product.UnitPrice
-
+                            UnitPrice=product.UnitPrice,
+                            Quantity = item.Quantity
                         };
                         conn.Insert(orders);
                     });
                     string sql = @"select * from products where productid in (
                                 SELECT a.productid from orders a 
-                                where a.customerid = 1 and productid not in (select productid from subscriptions where customerid = a.customerid)
+                                where a.customerid = ?CustomerId and productid not in (select productid from subscriptions where customerid = a.customerid)
                                 group by a.productid
                                 having count(a.productid) > 1)";
-                    var products = conn.Query<Products>(sql).ToList();
+                    var products = conn.Query<Products>(sql, new { order.CustomerId }).ToList();
                     if(products.Count > 0)
                     {
                         response.SuggestSubscription = true;
@@ -97,6 +97,46 @@ namespace HackathonAPI.Repositories
             {
                 response.Description = ex.Message;
                 response.Status = false;
+            }
+            return response;
+        }
+
+        public SuggestedItems Suggestions(int CustomerId)
+        {
+            SuggestedItems response = new SuggestedItems();
+            string sql = @"select * from products where productid in (
+                                SELECT a.productid from orders a 
+                                where a.customerid = ?CustomerId and productid not in (select productid from subscriptions where customerid = a.customerid)
+                                group by a.productid
+                                having count(a.productid) > 1)";
+            using(IDbConnection conn = GetConnection())
+            {
+                var products = conn.Query<Products>(sql, new { CustomerId }).ToList();
+                if (products.Count > 0)
+                {
+                    response.SuggestSubscription = true;
+                    response.SuggestedProducts = products;
+                }
+            }
+            return response;
+        }
+
+        public SuggestedItems RelatedProducts(int CustomerId)
+        {
+            SuggestedItems response = new SuggestedItems();
+            string sql = @"select * from products where productid in (
+                                SELECT a.productid from orders a 
+                                where a.customerid = ?CustomerId and productid not in (select productid from subscriptions where customerid = a.customerid)
+                                group by a.productid
+                                having count(a.productid) > 1)";
+            using (IDbConnection conn = GetConnection())
+            {
+                var products = conn.Query<Products>(sql, new { CustomerId }).ToList();
+                if (products.Count > 0)
+                {
+                    response.SuggestSubscription = true;
+                    response.SuggestedProducts = products;
+                }
             }
             return response;
         }
