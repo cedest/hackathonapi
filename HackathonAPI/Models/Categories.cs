@@ -1,10 +1,18 @@
 ﻿using System;
+using Dapper;
+
 namespace HackathonAPI.Models
 {
+    [Table("categories")]
     public class Categories
     {
-        public Categories()
-        {
-        }
+        [Key]
+        public int CategoryId { get; set; }
+        public string CategoryName { get; set; }
+        public string Description { get; set; }
+        public string Picture { get; set; }
+        public int MerchantId { get; set; }
+        [Editable(false)]
+        public string MerchantName { get; set; }
     }
 }

@@ -17,6 +17,9 @@ namespace HackathonAPI.Models
         public string Frequency { get; set; }
         public bool Status { get; set; }
         public DateTime SubscriptionDate { get; set; }
+        public int MerchantId { get; set; }
+        [Editable(false)]
+        public string MerchantName { get; set; }
     }
 
     public class NewSubscriptions

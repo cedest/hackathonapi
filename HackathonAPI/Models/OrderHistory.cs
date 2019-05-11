@@ -18,6 +18,9 @@ namespace HackathonAPI.Models
         public int Quantity { get; set; }
         [ReadOnly(true)]
         public DateTime PurchaseDate { get; set; }
+        public int MerchantId { get; set; }
+        [Editable(false)]
+        public string MerchantName { get; set; }
     }
 
     public class NewOrder

@@ -15,5 +15,8 @@ namespace HackathonAPI.Models
         public string Email { get; set; }
         public string Phone { get; set; }
         public string Address { get; set; }
+        public int MerchantId { get; set; }
+        [Editable(false)]
+        public string MerchantName { get; set; }
     }
 }
