@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using HackathonAPI.Models;
+using HackathonAPI.Repositories;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -11,36 +14,52 @@ namespace HackathonAPI.Controllers
     [Route("api/[controller]")]
     public class CartsController : Controller
     {
+        CartRepository repo;
+
+        public CartsController(IConfiguration configuration)
+        {
+            repo = new CartRepository(configuration);
+        }
+
         // GET: api/values
         [HttpGet]
-        public IEnumerable<string> Get()
+        public List<Carts> Get()
         {
-            return new string[] { "value1", "value2" };
+            return repo.ListAll();
+        }
+
+        [HttpGet("customer/{CustomerId}")]
+        public List<Carts> GetByCustomer(int CustomerId)
+        {
+            return repo.List(CustomerId);
         }
 
         // GET api/values/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpGet("{CartId}")]
+        public Carts Get(int CartId)
         {
-            return "value";
+            return repo.Read(CartId);
         }
 
         // POST api/values
         [HttpPost]
-        public void Post([FromBody]string value)
+        public Response Post([FromBody]NewCarts value)
         {
+            return repo.Create(value);
         }
 
         // PUT api/values/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+        [HttpPut]
+        public Response Put([FromBody]Carts value)
         {
+            return repo.Update(value);
         }
 
         // DELETE api/values/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        [HttpDelete("{CartId}")]
+        public Response Delete(int CartId)
         {
+            return repo.Delete(CartId);
         }
     }
 }

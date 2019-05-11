@@ -102,7 +102,21 @@ namespace HackathonAPI.Repositories
             {
                 using(IDbConnection conn = GetConnection())
                 {
-                    conn.Update(subscription);
+                    var customers = conn.Get<Customers>(subscription.CustomerId);
+                    var products = conn.Get<Products>(subscription.ProductId);
+                    var frequencies = conn.Get<Frequencies>(subscription.FrequencyId);
+                    Subscriptions sub = new Subscriptions()
+                    {
+                        CustomerId = subscription.CustomerId,
+                        CustomerName = customers.FullName,
+                        ProductId = subscription.ProductId,
+                        ProductName = products.ProductName,
+                        Quantity = subscription.Quantity,
+                        Status = true,
+                        FrequencyId = subscription.FrequencyId,
+                        Frequency = frequencies.Frequency
+                    };
+                    conn.Update(sub);
                     response.Status = true;
                     response.Description = "Record updated";
                 }

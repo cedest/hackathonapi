@@ -109,14 +109,21 @@ namespace HackathonAPI.Repositories
                                 where a.customerid = ?CustomerId and productid not in (select productid from subscriptions where customerid = a.customerid)
                                 group by a.productid
                                 having count(a.productid) > 1)";
-            using(IDbConnection conn = GetConnection())
+            try
             {
-                var products = conn.Query<Products>(sql, new { CustomerId }).ToList();
-                if (products.Count > 0)
+                using (IDbConnection conn = GetConnection())
                 {
-                    response.SuggestSubscription = true;
-                    response.SuggestedProducts = products;
+                    var products = conn.Query<Products>(sql, new { CustomerId }).ToList();
+                    if (products.Count > 0)
+                    {
+                        response.SuggestSubscription = true;
+                        response.SuggestedProducts = products;
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                var error = ex.Message;
             }
             return response;
         }

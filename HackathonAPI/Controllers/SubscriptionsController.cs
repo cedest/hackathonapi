@@ -48,6 +48,12 @@ namespace HackathonAPI.Controllers
             return repo.Create(value);
         }
 
+        [HttpPost("bulk")]
+        public Response PostBulk([FromBody]NewSubscriptions value)
+        {
+            return repo.Create(value);
+        }
+
         // PUT api/values/5
         [HttpPut]
         public Response Put([FromBody]Subscriptions value)

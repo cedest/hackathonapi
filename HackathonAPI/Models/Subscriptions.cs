@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Dapper;
 
 namespace HackathonAPI.Models
@@ -16,15 +17,26 @@ namespace HackathonAPI.Models
         public int FrequencyId { get; set; }
         public string Frequency { get; set; }
         public bool Status { get; set; }
+        [ReadOnly(true)]
         public DateTime SubscriptionDate { get; set; }
         public int MerchantId { get; set; }
         [Editable(false)]
         public string MerchantName { get; set; }
     }
 
-    public class NewSubscriptions
+    public class NewSubscriptions : NewSub
     {
         public int CustomerId { get; set; }
+    }
+
+    public class NewBulkSubscriptions
+    {
+        public int CustomerId { get; set; }
+        public List<NewSub> subscriptions { get; set; }
+    }
+
+    public class NewSub
+    {
         public int ProductId { get; set; }
         public int FrequencyId { get; set; }
         public int Quantity { get; set; }
