@@ -1,10 +1,12 @@
 ﻿using System;
 namespace HackathonAPI.Models
 {
-    public class SubscriptionResponse
+    public class SubscriptionResponse: Response
     {
-        public SubscriptionResponse()
-        {
-        }
+
+
+            public Subscriptions Subscription { get; set; }
+        
+    
     }
 }

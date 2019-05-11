@@ -56,7 +56,7 @@ namespace HackathonAPI.Repositories
 
         public Response Create(NewSubscriptions subscription)
         {
-            Response response = new Response();
+            SubscriptionResponse response = new SubscriptionResponse();
             try
             {
                 using(IDbConnection conn = GetConnection())
@@ -71,6 +71,9 @@ namespace HackathonAPI.Repositories
                     var customers = conn.Get<Customers>(subscription.CustomerId);
                     var products = conn.Get<Products>(subscription.ProductId);
                     var frequencies = conn.Get<Frequencies>(subscription.FrequencyId);
+                    int MerchantId = subscription.MerchantId == 0 ? 1 : subscription.MerchantId;
+                    var merchants = conn.Get<Merchants>(MerchantId);
+
                     Subscriptions sub = new Subscriptions()
                     {
                         CustomerId = subscription.CustomerId,
@@ -80,11 +83,14 @@ namespace HackathonAPI.Repositories
                         Quantity = subscription.Quantity,
                         Status = true,
                         FrequencyId = subscription.FrequencyId,
-                        Frequency = frequencies.Frequency
+                        Frequency = frequencies.Frequency,
+                        MerchantId = MerchantId,
+                        MerchantName = merchants.MerchantName
                     };
-                    conn.Insert(sub);
+                    sub.SubscriptionId = conn.Insert(sub).Value;
                     response.Status = true;
                     response.Description = "Record saved";
+                    response.Subscription = sub;
                 }
             }
             catch (Exception ex)
@@ -95,9 +101,9 @@ namespace HackathonAPI.Repositories
             return response;
         }
 
-        public Response Update(Subscriptions subscription)
+        public SubscriptionResponse Update(Subscriptions subscription)
         {
-            Response response = new Response();
+            SubscriptionResponse response = new SubscriptionResponse();
             try
             {
                 using(IDbConnection conn = GetConnection())
@@ -105,6 +111,9 @@ namespace HackathonAPI.Repositories
                     var customers = conn.Get<Customers>(subscription.CustomerId);
                     var products = conn.Get<Products>(subscription.ProductId);
                     var frequencies = conn.Get<Frequencies>(subscription.FrequencyId);
+                    int MerchantId = subscription.MerchantId == 0 ? 1 : subscription.MerchantId;
+                    var merchants = conn.Get<Merchants>(MerchantId);
+
                     Subscriptions sub = new Subscriptions()
                     {
                         CustomerId = subscription.CustomerId,
@@ -114,11 +123,15 @@ namespace HackathonAPI.Repositories
                         Quantity = subscription.Quantity,
                         Status = true,
                         FrequencyId = subscription.FrequencyId,
-                        Frequency = frequencies.Frequency
+                        Frequency = frequencies.Frequency,
+                        SubscriptionId = subscription.SubscriptionId,
+                        MerchantId = MerchantId,
+                        MerchantName = merchants.MerchantName
                     };
                     conn.Update(sub);
                     response.Status = true;
                     response.Description = "Record updated";
+                    response.Subscription = sub;
                 }
             }
             catch (Exception ex)

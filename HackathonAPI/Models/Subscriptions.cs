@@ -27,6 +27,7 @@ namespace HackathonAPI.Models
     public class NewSubscriptions : NewSub
     {
         public int CustomerId { get; set; }
+        public int MerchantId { get; set; }
     }
 
     public class NewBulkSubscriptions
