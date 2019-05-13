@@ -76,7 +76,6 @@ namespace HackathonAPI.Repositories
             return response;
         }
 
-
         public Response Update(Carts cart)
         {
             Response response = new Response();
