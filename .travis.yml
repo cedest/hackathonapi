@@ -1,6 +1,6 @@
 language: csharp 
 mono: none
-solution: SampleWithMongoDB.API.sln
+solution: HackathonAPI.sln
 dotnet: 2.1
 
 script:  
